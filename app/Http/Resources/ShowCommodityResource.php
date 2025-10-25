@@ -19,6 +19,8 @@ class ShowCommodityResource extends JsonResource
             'commodity_acquisition' => $this->commodity_acquisition,
             'commodity_location_id' => $this->commodity_location_id,
             'commodity_location' => $this->commodity_location,
+            'commodity_category_id' => $this->commodity_category_id,
+            'commodity_category' => $this->commodity_category,
             'item_code' => $this->item_code,
             'name' => $this->name,
             'material' => $this->material,
@@ -36,6 +38,10 @@ class ShowCommodityResource extends JsonResource
             'ukuran' => $this->ukuran,
             'warna' => $this->warna,
             'pengguna' => $this->pengguna,
+            'masa' => $this->masa,
+            'residu' => $this->residu,
+            'residu_formatted' => $this->indonesian_currency($this->residu)
+
         ];
     }
 }

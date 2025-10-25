@@ -4,17 +4,17 @@
 
 	<div class="row justify-content-center">
 		@foreach ($roles as $role)
-		<div class="col-lg-6 col-md-6 col-sm-6 col-12">
+		<div class="col-lg-3 col-md-6 col-sm-6 col-12">
 			<div class=" card card-statistic-1" style="border-radius: 30px;">
 				<div class="card-icon bg-primary" style="border-radius: 20px;">
 					<i class="fas fa-users"></i>
 				</div>
 				<div class="card-wrap">
 					<div class="card-header">
-						<h4>Total {{ $role->name }}</h4>
+						<h4>{{ $role->name }}</h4>
 					</div>
 					<div class="card-body">
-						{{ $role->users_count }}
+						{{ $role->users_count }} Pengguna
 					</div>
 				</div>
 				<a href="{{ route('pengguna.index', ['role_id' => $role->id]) }}" class="stretched-link"></a>
@@ -27,7 +27,7 @@
 			@include('utilities.alert')
 			<div class="d-flex justify-content-end mb-3">
 				@can('tambah pengguna')
-				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#user_create_modal">
+				<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#user_create_modal">
 					<i class="fas fa-fw fa-plus"></i>
 					Tambah Data
 				</button>
@@ -80,13 +80,13 @@
 									<div class="btn-group">
 										@can('detail pengguna')
 										<a data-id="{{ $user->id }}" class="btn btn-sm btn-info text-white show-modal mr-2"
-											data-toggle="modal" data-target="#show_user">
+											data-bs-toggle="modal" data-bs-target="#show_user">
 											<i class="fas fa-fw fa-search"></i>
 										</a>
 										@endcan
 										@can('ubah pengguna')
 										<a data-id="{{ $user->id }}" class="btn btn-sm btn-success text-white edit-modal mr-2"
-											data-toggle="modal" data-target="#user_edit_modal" title="Ubah data">
+											data-bs-toggle="modal" data-bs-target="#user_edit_modal" title="Ubah data">
 											<i class="fas fa-fw fa-edit"></i>
 										</a>
 										@endcan

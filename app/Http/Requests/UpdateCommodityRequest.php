@@ -26,6 +26,7 @@ class UpdateCommodityRequest extends FormRequest
         return [
             'commodity_acquisition_id' => 'required|numeric|exists:commodity_acquisitions,id',
             'commodity_location_id' => 'required|numeric|exists:commodity_locations,id',
+            'commodity_category_id' => 'required|numeric|exists:commodity_categories,id',
             'item_code' => 'required|unique:commodities,item_code,' . $this->commodity->id . '|min:3|max:255',
             'name' => 'required|string|min:3|max:255',
             'brand' => 'required|string|min:3|max:255',
@@ -41,6 +42,8 @@ class UpdateCommodityRequest extends FormRequest
             'warna' => ['nullable', 'string', 'max:255'],
 
             'pengguna' => ['nullable', 'string', 'max:255'],
+            'masa' => ['nullable', 'string', 'max:255'],
+            'residu' => ['nullable', 'string', 'max:255'],
 
         ];
     }

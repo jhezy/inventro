@@ -28,6 +28,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+
         $commodity_order_by_price = Commodity::orderBy('price', 'DESC')->take(5)->get();
         $commodity_condition_count = $this->commodityRepository->countCommodityCondition()->map(function ($commodity) {
             return collect([

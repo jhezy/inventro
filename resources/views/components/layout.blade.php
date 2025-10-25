@@ -19,6 +19,10 @@
 
 	<link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.1/dist/css/tom-select.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.4.1/dist/css/tom-select.bootstrap4.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<link rel="stylesheet" href="{{ url('assets/fontawesome/css/all.css') }}" />
+
+
 </head>
 
 <style>
@@ -163,6 +167,73 @@
 		border-radius: 10px;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 	}
+
+	navbar .nav-link i.fa-bell {
+		vertical-align: middle;
+	}
+
+	/* === NOTIFIKASI RESPONSIF & RAPI === */
+	.nav-item.dropdown .dropdown-menu.notif-dropdown {
+		max-width: 95vw;
+		width: 250px;
+		max-height: 80vh;
+		overflow: hidden;
+		border-radius: 12px;
+		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+		border: none;
+		font-size: 0.95rem;
+	}
+
+	@media (max-width: 768px) {
+		.nav-item.dropdown .dropdown-menu.notif-dropdown {
+			position: fixed !important;
+			right: 10px !important;
+			left: 10px !important;
+			top: 70px !important;
+			width: auto !important;
+			max-height: 75vh;
+			z-index: 1055;
+		}
+	}
+
+	.dropdown-header.notif-header {
+		background: #f8f9fa;
+		padding: 12px 16px;
+		border-bottom: 1px solid #e5e7eb;
+		font-weight: 600;
+		color: #111827;
+	}
+
+	.notif-list {
+		max-height: calc(80vh - 60px);
+		overflow-y: auto;
+		scrollbar-width: thin;
+		scrollbar-color: #ccc transparent;
+	}
+
+	.notif-list::-webkit-scrollbar {
+		width: 6px;
+	}
+
+	.notif-list::-webkit-scrollbar-thumb {
+		background-color: #ccc;
+		border-radius: 10px;
+	}
+
+	.notif-list::-webkit-scrollbar-thumb:hover {
+		background-color: #999;
+	}
+
+	/* Indikator titik merah */
+	.notif-indicator {
+		position: absolute;
+		top: 8px;
+		right: 10px;
+		width: 10px;
+		height: 10px;
+		background: red;
+		border-radius: 50%;
+	}
 </style>
 
 
@@ -170,60 +241,124 @@
 	<div id="app">
 		<div class="main-wrapper">
 			<div class="navbar"></div>
-			<nav class="navbar navbar-expand-lg main-navbar bg-white shadow-sm">
-				<form class="form-inline mr-auto">
-					<ul class="navbar-nav mr-3">
-						<li>
-							<a href="#" data-toggle="sidebar" class="nav-link nav-link-lg">
-								<i class="fas fa-bars"></i>
+			{{-- Navbar --}}
+			<nav class="navbar navbar-expand-lg main-navbar bg-white shadow-sm px-4">
+				<div class="container-fluid d-flex justify-content-between align-items-center">
+					{{-- TOMBOL SIDEBAR / MENU --}}
+					<div class="d-flex align-items-center">
+						<a href="#" data-bs-toggle="collapse" data-bs-target="#sidebar" class="nav-link nav-link-lg">
+							<i class="fas fa-bars"></i>
+						</a>
+					</div>
+
+					{{-- BAGIAN KANAN: NOTIFIKASI + USER --}}
+					<ul class="navbar-nav d-flex flex-row align-items-center ms-auto gap-3">
+
+						{{-- 🔔 NOTIFIKASI (Responsif) --}}
+						@hasanyrole('administrator|kepsek')
+						<li class="nav-item dropdown">
+							<a href="#" data-bs-toggle="dropdown" class="nav-link position-relative">
+								<i class="fas fa-bell fa-xl {{ isset($notifOn) && $notifOn ? 'text-warning' : 'text-secondary' }}"></i>
+								@if(isset($notifOn) && $notifOn)
+								<span class="notif-indicator"></span>
+								@endif
 							</a>
+
+							<div class="dropdown-menu dropdown-menu-end notif-dropdown">
+								<div class="dropdown-header notif-header d-flex justify-content-between align-items-center">
+									<span>Notifikasi</span>
+									<a href="{{ route('notifications.markAllRead') }}" class="small text-primary">Tandai semua dibaca</a>
+								</div>
+
+								<div class="notif-list list-group list-group-flush">
+									@forelse($notifications->where('is_read', 0) ?? [] as $notif)
+									<a href="{{ route('notifications.read', $notif->id) }}"
+										class="list-group-item list-group-item-action border-0 py-3 px-4
+       {{ $notif->is_read ? '' : 'bg-light' }}">
+										<div class="d-flex align-items-start">
+											<div class="me-3 text-primary mt-1">
+												<i class="fas fa-info-circle"></i>
+											</div>
+											<div class="flex-fill">
+												<div class="fw-semibold">{{ $notif->title }}</div>
+												<div class="small text-muted text-wrap">{{ $notif->message }}</div>
+												<div class="small text-muted">
+													{{ \Carbon\Carbon::parse($notif->created_at)->diffForHumans() }}
+												</div>
+											</div>
+										</div>
+									</a>
+									@empty
+									<div class="list-group-item text-center text-muted small py-3">
+										Tidak ada notifikasi
+									</div>
+									@endforelse
+								</div>
+
+							</div>
+						</li>
+						@endhasanyrole
+
+
+
+						{{-- 👤 USER DROPDOWN --}}
+						<li class="nav-item dropdown">
+							<a href="#" class="nav-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
+								<img src="{{ asset('assets/img/avatar/avatar-1.png') }}" alt="avatar"
+									class="rounded-circle me-2" width="32" height="32">
+								<span class="d-none d-lg-inline text-dark fw-semibold">{{ auth()->user()->name }}</span>
+							</a>
+							<ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
+								<li class="dropdown-header small">
+									Akun sejak: {{ auth()->user()->created_at->format('d-m-Y') }}
+								</li>
+								@can('mengatur profile')
+								<li>
+									<a class="dropdown-item" href="{{ route('profile.index') }}">
+										<i class="fas fa-cog"></i> Pengaturan Profil
+									</a>
+								</li>
+								@endcan
+								<li>
+									<hr class="dropdown-divider">
+								</li>
+								<li>
+									<form action="{{ route('logout') }}" method="POST">
+										@csrf
+										<button type="submit" class="dropdown-item text-danger">
+											<i class="fas fa-sign-out-alt"></i> Logout
+										</button>
+									</form>
+								</li>
+							</ul>
 						</li>
 					</ul>
-				</form>
-
-				<ul class="navbar-nav navbar-right">
-					<li class="dropdown">
-						<a href="#" data-toggle="dropdown"
-							class="nav-link dropdown-toggle nav-link-lg d-flex align-items-center">
-							<img alt="image"
-								src="../assets/img/avatar/avatar-1.png"
-								class="rounded-circle mr-2"
-								style="width:32px; height:32px;" />
-							<span class="d-none text-dark d-lg-inline">Halo, {{ auth()->user()->name }}</span>
-						</a>
-						<div class="dropdown-menu dropdown-menu-right">
-							<div class="dropdown-title small">
-								Akun sejak: {{ auth()->user()->diffForHumanDate(auth()->user()->created_at) }}
-							</div>
-
-							@can('mengatur profile')
-							<a href="{{ route('profile.index') }}" class="dropdown-item has-icon">
-								<i class="fas fa-cog"></i> Pengaturan Profil
-							</a>
-							@endcan
-
-							<div class="dropdown-divider"></div>
-							<form id="logout-form" action="{{ route('logout') }}" method="POST">
-								@csrf
-								<button type="submit" class="dropdown-item has-icon text-danger">
-									<i class="fas fa-sign-out-alt"></i> Logout
-								</button>
-							</form>
-						</div>
-					</li>
-				</ul>
+				</div>
 			</nav>
+
+
+
+
+
 
 			<div class="main-sidebar "
 				<aside id="sidebar-wrapper ">
-				<div class="sidebar-brand mb-3">
-					<!-- <a href="{{ route('home') }}">{{ config('app.name') }}</a> -->
+				<!-- <div class="sidebar-brand mb-3">
+
+					<a href="{{ route('home') }}">{{ config('app.name') }}</a>
 					<a href="{{ route('home') }}">Inventory</a>
+				</div> -->
+				<div class="sidebar-brand sidebar-brand-sm mb-3 d-flex align-items-center gap-2">
+					<a href="{{ route('home') }}" class="d-flex align-items-center text-decoration-none">
+						<!-- Logo -->
+						<img src="{{ asset('assets/img/swg.png') }}" alt="Logo"
+							class="rounded m-2" style="width: 32px; height: 32px; object-fit: cover;">
+
+						<!-- Nama -->
+						<a href="{{ route('home') }}">Inventory</a>
+					</a>
 				</div>
-				<div class="sidebar-brand sidebar-brand-sm mb-3">
-					<!-- <a href="{{ route('home') }}">{{ substr(config('app.name'), 0, 2) }}</a> -->
-					<a href="{{ route('home') }}">Inventory</a>
-				</div>
+
 
 				<ul class="sidebar-menu">
 					<!-- <li class="menu-header">Dashboard</li> -->
@@ -258,6 +393,49 @@
 					</li>
 					@endcan
 
+					@can('lihat kategori')
+					<li class="nav-item{{ request()->routeIs('kategori.index') ? ' active' : '' }}">
+						<a href="{{ route('kategori.index') }}" class="nav-link">
+							<i class="fas fa-tags"></i> <span>Kategori Barang</span>
+						</a>
+					</li>
+					@endcan
+
+					@can('lihat penyusutan')
+					<li class="nav-item{{ request()->routeIs('penyusutan.index') ? ' active' : '' }}">
+						<a href="{{ route('penyusutan.index') }}" class="nav-link">
+							<i class="fas fa-boxes-stacked"></i> <span>Data Penyusutan</span>
+						</a>
+					</li>
+					@endcan
+
+					@can('lihat rab')
+					<li class="nav-item{{ request()->routeIs('rab.index') ? ' active' : '' }}">
+						<a href="{{ route('rab.index') }}" class="nav-link">
+							<i class="fas fa-file-invoice-dollar"></i> <span>Data RAB</span>
+						</a>
+					</li>
+					@endcan
+
+
+
+					@can('lihat peminjaman')
+					<li class="nav-item{{ request()->routeIs('peminjaman.index') ? ' active' : '' }}">
+						<a href="{{ route('peminjaman.index') }}" class="nav-link">
+							<i class="fas fa-hand-holding"></i> <span>Data Peminjaman</span>
+						</a>
+					</li>
+
+					@endcan
+
+					@can('lihat barang keluar')
+					<li class="nav-item{{ request()->routeIs('barang-keluar.index') ? ' active' : '' }}">
+						<a href="{{ route('barang-keluar.index') }}" class="nav-link">
+							<i class="fas fa-truck-loading"></i> <span>Barang Keluar</span>
+						</a>
+					</li>
+					@endcan
+
 					@can('lihat pengguna')
 					<li class="nav-item{{ request()->routeIs('pengguna.index') ? ' active' : '' }}">
 						<a href="{{ route('pengguna.index') }}" class="nav-link">
@@ -265,6 +443,16 @@
 						</a>
 					</li>
 					@endcan
+
+					<!-- @can('approve peminjaman')
+					<li class="nav-item{{ request()->routeIs('peminjaman.approval') ? ' active' : '' }}">
+						<a href="{{ route('peminjaman.approval') }}" class="nav-link">
+							<i class="fas fa-user-check"></i> <span>Approval Peminjaman</span>
+						</a>
+					</li>
+					@endcan -->
+
+
 
 					<!-- <li class="menu-header">Pengaturan</li> -->
 					@can('mengatur profile')
@@ -282,6 +470,8 @@
 						</a>
 					</li>
 					@endcan
+
+
 				</ul>
 				</aside>
 			</div>
@@ -303,7 +493,7 @@
 	<!-- General JS Scripts -->
 	<script src="{{ url('assets/js/jquery-3.5.1.min.js') }}"></script>
 	<script src="{{ url('assets/js/popper.min.js') }}"></script>
-	<script src="{{ url('assets/bootstrap/js/bootstrap.min.js') }}"></script>
+	<!-- <script src="{{ url('assets/bootstrap/js/bootstrap.min.js') }}"></script> -->
 	<script src="{{ url('assets/js/jquery.nicescroll.min.js') }}"></script>
 	<script src="{{ url('assets/js/moment.min.js') }}"></script>
 	<script src="{{ url('assets/js/stisla.js') }}"></script>
@@ -372,6 +562,7 @@
 	</script>
 	@stack('modal')
 	@stack('js')
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

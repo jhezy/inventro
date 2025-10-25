@@ -70,7 +70,8 @@ class CommoditySeeder extends Seeder
             DB::table('commodities')->insert([
                 'commodity_acquisition_id' => mt_rand(1, 2),
                 'commodity_location_id' => mt_rand(1, count($commodity_locations)),
-                'item_code' => 'BRG-'.mt_rand(1000, 9000).mt_rand(100, 900),
+                'commodity_category_id' => mt_rand(1, 5), // ✅ tambahkan baris ini
+                'item_code' => 'BRG-' . mt_rand(1000, 9000) . mt_rand(100, 900),
                 'name' => $commodities[array_rand($commodities)],
                 'brand' => $brands[array_rand($brands)],
                 'material' => $materials[array_rand($materials)],

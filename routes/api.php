@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\API\CommodityCategoryController;
 use App\Http\Controllers\API\CommodityAcquisitionController;
+use App\Http\Controllers\API\CommodityPenyusutanController;
 use App\Http\Controllers\API\CommodityController;
 use App\Http\Controllers\API\CommodityLocationController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\RabController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,12 +28,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::name('api.')->group(function () {
     Route::get('/barang/{commodity}', [CommodityController::class, 'show'])->name('barang.show');
+    Route::get('/penyusutan/{commodity_penyusutan}', [CommodityPenyusutanController::class, 'show'])->name('penyusutan.show');
     Route::get('/barang/{commodity}/qrcode', [CommodityController::class, 'generateQrCode'])->name('barang.generate-qrcode');
     Route::get('/ruangan/{commodity_location}', [CommodityLocationController::class, 'show'])->name('ruangan.show');
-    Route::get(
-        '/perolehan/{commodity_acquisition}',
-        [CommodityAcquisitionController::class, 'show']
-    )->name('perolehan.show');
+    Route::get('/kategori/{commodity_category}', [CommodityCategoryController::class, 'show'])->name('kategori.show');
+    Route::get('/perolehan/{commodity_acquisition}', [CommodityAcquisitionController::class, 'show'])->name('perolehan.show');
     Route::get('/pengguna/{user}', [UserController::class, 'show'])->name('pengguna.show');
     Route::get('/peran-dan-hak-akses/{role}', [RoleController::class, 'show'])->name('peran-dan-hak-akses.show');
+    Route::get('/rab/{rab}', [RabController::class, 'show'])->name('rab.show');
+    Route::get('/rabs/{id}', [RabController::class, 'show'])->name('rabs.show');
 });

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\CommodityCategory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,6 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CommodityLocationSeeder::class);
         $this->call(CommodityAcquisitionSeeder::class);
         $this->call(CommoditySeeder::class);
+        $this->call(CommodityCategory::class);
         $this->call(RoleSeeder::class);
         $this->call(PermissionSeeder::class);
         $this->call(UserRoleSeeder::class);

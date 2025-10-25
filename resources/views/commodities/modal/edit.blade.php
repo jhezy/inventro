@@ -1,10 +1,10 @@
-<div class="modal fade" id="commodity_edit_modal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+<div class="modal fade" id="commodity_edit_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
 	role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="modalLabel">Ubah Data Barang</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
@@ -39,6 +39,35 @@
 								</select>
 							</div>
 						</div>
+						<div class="col-lg-4">
+							<div class="form-group">
+								<label for="commodity_category_id">Kategori Barang</label>
+								<select class="form-control" name="commodity_category_id" id="commodity_category_id"
+									style="width: 100%;" placeholder="Pilih atau ketik kategori barang..">
+									<option selected>Pilih..</option>
+									@foreach ($commodity_categories as $commodity_category)
+									<option value="{{ $commodity_category->id }}">{{ $commodity_category->name }}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="form-group">
+								<label for="masa">Masa Barang (/tahun)</label>
+								<input type="text" class="form-control" name="masa" id="masa" placeholder="Masukan masa barang..">
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="form-group">
+								<label for="quantity">Kuantitas</label>
+								<input type="number" class="form-control" name="quantity" id="quantity"
+									placeholder="Masukan kuantitas barang..">
+							</div>
+						</div>
+
+
+
+
 					</div>
 
 					<hr>
@@ -126,21 +155,8 @@
 					<div class="row">
 						<div class="col-lg-4">
 							<div class="form-group">
-								<label for="quantity">Kuantitas</label>
-								<input type="number" class="form-control" name="quantity" id="quantity"
-									placeholder="Masukan kuantitas barang..">
-							</div>
-						</div>
-						<div class="col-lg-4 col-6">
-							<div class="form-group">
-								<label for="price">Harga</label>
-								<div class="input-group">
-									<div class="input-group-prepend">
-										<span class="input-group-text" id="basic-addon1">Rp.</span>
-									</div>
-									<input type="number" class="form-control" name="price" id="price"
-										placeholder="Masukan harga barang..">
-								</div>
+								<label for="name">Residu Barang</label>
+								<input type="text" class="form-control" name="residu" id="residu" placeholder="Masukan residu barang..">
 							</div>
 						</div>
 						<div class="col-lg-4 col-6">
@@ -155,6 +171,20 @@
 								</div>
 							</div>
 						</div>
+
+						<div class="col-lg-4 col-6">
+							<div class="form-group">
+								<label for="price">Harga</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="basic-addon1">Rp.</span>
+									</div>
+									<input type="number" class="form-control" name="price" id="price"
+										placeholder="Masukan harga barang..">
+								</div>
+							</div>
+						</div>
+
 					</div>
 
 					<div class="row">
@@ -168,7 +198,7 @@
 					</div>
 
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
 						<button type="submit" class="btn btn-success">Ubah</button>
 					</div>
 				</form>

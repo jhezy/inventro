@@ -7,10 +7,9 @@
 			@include('utilities.alert')
 			<div class="d-flex justify-content-end mb-3">
 				@can('tambah perolehan')
-				<button type="button" class="btn btn-primary" data-toggle="modal"
-					data-target="#commodity_acquisition_create_modal">
-					<i class="fas fa-fw fa-plus"></i>
-					Tambah Data
+				<button type="button" class="btn btn-primary" data-bs-toggle="modal"
+					data-bs-target="#commodity_acquisition_create_modal">
+					<i class="fas fa-fw fa-plus"></i> Tambah Data
 				</button>
 				@endcan
 			</div>
@@ -32,27 +31,31 @@
 								<th scope="row">{{ $loop->iteration }}</th>
 								<td>{{ $commodityAcquisition->name }}</td>
 								<td>{{ Str::limit($commodityAcquisition->description, 55, '...') }}</td>
-								</td>
 								<td class="text-center">
 									<div class="btn-group">
 										@can('detail perolehan')
-										<a data-id="{{ $commodityAcquisition->id }}" class="btn btn-sm btn-info text-white show-modal mr-2"
-											data-toggle="modal" data-target="#show_commodity_acquisition">
+										<a data-id="{{ $commodityAcquisition->id }}"
+											class="btn btn-sm btn-info text-white show-modal m-1"
+											data-bs-toggle="modal"
+											data-bs-target="#show_commodity_acquisition">
 											<i class="fas fa-fw fa-search"></i>
 										</a>
 										@endcan
+
 										@can('ubah perolehan')
 										<a data-id="{{ $commodityAcquisition->id }}"
-											class="btn btn-sm btn-success text-white edit-modal mr-2" data-toggle="modal"
-											data-target="#commodity_acquisition_edit_modal">
+											class="btn btn-sm btn-success text-white edit-modal m-1"
+											data-bs-toggle="modal"
+											data-bs-target="#commodity_acquisition_edit_modal">
 											<i class="fas fa-fw fa-edit"></i>
 										</a>
 										@endcan
+
 										@can('hapus perolehan')
 										<form action="{{ route('perolehan.destroy', $commodityAcquisition->id) }}" method="POST">
 											@csrf
 											@method('DELETE')
-											<button type="submit" class="btn btn-sm btn-danger delete-button">
+											<button type="submit" class="btn btn-sm btn-danger delete-button m-1">
 												<i class="fas fa-fw fa-trash-alt"></i>
 											</button>
 										</form>

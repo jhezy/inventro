@@ -16,7 +16,7 @@ class CommodityController extends Controller
      */
     public function show(Commodity $commodity)
     {
-        $commodity->load('commodity_acquisition:id,name', 'commodity_location:id,name');
+        $commodity->load('commodity_acquisition:id,name', 'commodity_location:id,name', 'commodity_category:id,name');
 
         return response()->json([
             'code' => Response::HTTP_OK,
@@ -47,7 +47,7 @@ class CommodityController extends Controller
             ->margin(1)
             ->generate($verificationUrl);
 
-        $qrCodeDataUri = 'data:image/svg+xml;base64,'.base64_encode($qrCode);
+        $qrCodeDataUri = 'data:image/svg+xml;base64,' . base64_encode($qrCode);
 
         return response()->json([
             'code' => Response::HTTP_OK,
@@ -55,7 +55,7 @@ class CommodityController extends Controller
             'data' => [
                 'qr_code_uri' => $qrCodeDataUri,
                 'name' => $commodity->name,
-                'filename' => 'qrcode-'.$commodity->name.'.svg',
+                'filename' => 'qrcode-' . $commodity->name . '.svg',
             ],
         ], Response::HTTP_OK);
     }

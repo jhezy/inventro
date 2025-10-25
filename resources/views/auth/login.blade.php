@@ -6,7 +6,7 @@
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
 	<title>Login &mdash; {{ config('app.name') }}</title>
 
-	<!-- Bootstrap -->
+	<!-- Bootstrap & FontAwesome -->
 	<link rel="stylesheet" href="{{ url('assets/bootstrap/css/bootstrap.min.css') }}">
 	<link rel="stylesheet" href="{{ url('assets/fontawesome/css/all.css') }}">
 
@@ -26,7 +26,6 @@
 			max-width: 420px;
 			background: rgba(255, 255, 255, 0.15);
 			backdrop-filter: blur(5px);
-			/* backdrop-filter: liquid; */
 			border-radius: 20px;
 			padding: 40px 30px;
 			box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
@@ -60,13 +59,18 @@
 			background: rgba(255, 255, 255, 0.25);
 		}
 
+		.input-group-text {
+			background: rgba(255, 255, 255, 0.2);
+			border: none;
+			color: #fff;
+			border-radius: 0 12px 12px 0;
+		}
+
 		.btn-login {
-			width: 100%;
+			width: 48%;
 			border-radius: 12px;
 			padding: 12px;
 			font-weight: 600;
-			/* background: #fff; */
-			/* color: #2575fc; */
 			border: none;
 			transition: all 0.3s ease;
 		}
@@ -81,17 +85,35 @@
 			margin-top: 20px;
 			color: rgba(255, 255, 255, 0.8);
 		}
+
+		.d-flex-gap {
+			display: flex;
+			gap: 10px;
+		}
+
+		.forgot-password {
+			font-size: 13px;
+			color: rgba(255, 255, 255, 0.8);
+			display: block;
+			margin-top: 5px;
+			text-decoration: underline;
+		}
 	</style>
 </head>
 
 <body>
-	<div class="login-wrapper">
-		<h4 class="text-center mb-5">Selamat Datang </h4>
-		<!-- <p>Masuk ke <b>Inventaris Barang Sekolah</b></p> -->
+	<div class="login-wrapper d-flex flex-column align-items-center justify-content-center text-center">
+		<!-- Logo -->
+		<img src="{{ asset('assets/img/swg.png') }}" alt="Logo"
+			class="rounded mb-3"
+			style="height: 100px; width: auto; object-fit: contain;">
+
+		<!-- Judul -->
+		<h4 class="mb-4 text-white">Selamat Datang</h4>
 
 		@include('utilities.alert')
 
-		<form method="POST" action="{{ route('login') }}" class="needs-validation" novalidate="">
+		<form method="POST" action="{{ route('login') }}" class="needs-validation w-100" novalidate style="max-width: 350px;">
 			@csrf
 			<div class="mb-3">
 				<input id="email" type="email"
@@ -103,18 +125,28 @@
 			</div>
 
 			<div class="mb-3">
-				<input id="password" type="password"
-					class="form-control @error('password') is-invalid @enderror"
-					name="password" placeholder="Password..." required>
+				<div class="input-group">
+					<input id="password" type="password"
+						class="form-control @error('password') is-invalid @enderror"
+						name="password" placeholder="Password..." required>
+					<span class="input-group-text" id="toggle-password" style="cursor:pointer;">
+						<i class="fas fa-eye"></i>
+					</span>
+				</div>
 				@error('password')
 				<div class="invalid-feedback d-block text-light">{{ $message }}</div>
 				@enderror
+				<a href="{{ route('password.reset') }}" class="forgot-password d-block mt-2 text-light">Lupa Password?</a>
 			</div>
 
-			<button type="submit" class="btn-login btn-success">Login</button>
+			<div class="d-flex flex-column gap-2 mb-3">
+				<button type="submit" class="btn btn-success px-4 w-100 mb-2">Masuk</button>
+				<button type="reset" class="btn btn-secondary px-4 w-100">Reset</button>
+			</div>
+
 		</form>
 
-		<div class="footer-text">
+		<div class="footer-text mt-4 text-light small">
 			&copy; {{ date('Y') }} {{ config('app.name') }}
 		</div>
 	</div>
@@ -122,6 +154,18 @@
 	<!-- JS -->
 	<script src="{{ url('assets/js/jquery-3.5.1.min.js') }}"></script>
 	<script src="{{ url('assets/js/bootstrap.bundle.min.js') }}"></script>
+	<script>
+		// Toggle show/hide password
+		const togglePassword = document.getElementById('toggle-password');
+		const passwordInput = document.getElementById('password');
+
+		togglePassword.addEventListener('click', function() {
+			const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+			passwordInput.setAttribute('type', type);
+			this.querySelector('i').classList.toggle('fa-eye');
+			this.querySelector('i').classList.toggle('fa-eye-slash');
+		});
+	</script>
 </body>
 
 </html>

@@ -26,6 +26,7 @@ class StoreCommodityRequest extends FormRequest
         return [
             'commodity_acquisition_id' => 'required|numeric|exists:commodity_acquisitions,id',
             'commodity_location_id' => 'required|numeric|exists:commodity_locations,id',
+            'commodity_category_id' => 'required|numeric|exists:commodity_categories,id',
             'item_code' => 'required|unique:commodities,item_code|min:3|max:255',
             'name' => 'required|string|min:3|max:255',
             'brand' => 'required|string|min:3|max:255',
@@ -41,6 +42,8 @@ class StoreCommodityRequest extends FormRequest
             'warna' => ['nullable', 'string', 'max:255'],
 
             'pengguna' => ['nullable', 'string', 'max:255'],
+            'masa' => ['nullable', 'string', 'max:255'],
+            'residu' => ['nullable', 'string', 'max:255'],
 
         ];
     }
@@ -60,6 +63,10 @@ class StoreCommodityRequest extends FormRequest
             'commodity_location_id.required' => 'Kolom lokasi barang wajib diisi!',
             'commodity_location_id.numeric' => 'Kolom lokasi barang yang dipilih tidak valid!',
             'commodity_location_id.exists' => 'Kolom lokasi barang yang dipilih tidak valid!',
+
+            'commodity_category_id.required' => 'Kolom kategori barang wajib diisi!',
+            'commodity_category_id.numeric' => 'Kolom kategori barang yang dipilih tidak valid!',
+            'commodity_category_id.exists' => 'Kolom kategori barang yang dipilih tidak valid!',
 
             'item_code.required' => 'Kolom kode barang wajib diisi!',
             'item_code.unique' => 'Kode barang sudah digunakan. Pilih kode barang lain.',

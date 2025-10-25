@@ -74,36 +74,37 @@
 			<div class="d-flex justify-content-end mb-3">
 				<div class="btn-group">
 					<!-- @can('import barang')
-					<button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#excel_menu">
-						<i class="fas fa-fw fa-upload"></i>
-						Import Excel
-					</button>
-					@endcan
+    <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#excel_menu">
+        <i class="fas fa-fw fa-upload"></i>
+        Import Excel
+    </button>
+    @endcan -->
 
-					@can('export barang')
-					<button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#export_menu">
-						<i class="fas fa-fw fa-download"></i>
-						Export
-					</button>
-					@endcan -->
+					<!-- @can('export barang')
+    <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#export_menu">
+        <i class="fas fa-fw fa-download"></i>
+        Export
+    </button>
+    @endcan -->
 
 					@can('tambah barang')
-					<button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#commodity_create_modal">
+					<button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#commodity_create_modal">
 						<i class="fas fa-fw fa-plus"></i>
 						Tambah Data
 					</button>
 					@endcan
 
 					<!-- @can('print barang')
-					<form action="{{ route('barang.print') }}" method="POST">
-						@csrf
-						<button type="submit" class="btn btn-success">
-							<i class="fas fa-fw fa-print"></i>
-							Print
-						</button>
-					</form>
-					@endcan -->
+    <form action="{{ route('barang.print') }}" method="POST">
+        @csrf
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-fw fa-print"></i>
+            Print
+        </button>
+    </form>
+    @endcan -->
 				</div>
+
 			</div>
 
 
@@ -177,15 +178,18 @@
 					</div>
 					<div class="col-md-2">
 						<div class="form-group">
-							<label for="material">Bahan:</label>
-							<select name="material" id="material" placeholder="Pilih bahan.." @class([ 'form-control'
-								, 'is-valid'=> request()->filled('material')
+							<label for="commodity_category_id">Kategori :</label>
+							<select name="commodity_category_id" placeholder="kategori.."
+								id="commodity_category_id" @class([ 'form-control' , 'is-valid'=>
+								request()->filled('commodity_category_id')
 								])
 								>
-								<option value="">Pilih bahan..</option>
-								@foreach ($commodity_materials as $material)
-								<option value="{{ $material }}" @selected(request('material')==$material)>{{
-									$material }}</option>
+								<option value="">Pilih lokasi barang..</option>
+								@foreach ($commodity_categories as $commodity_category)
+								<option value="{{ $commodity_category->id }}"
+									@selected(request('commodity_category_id')==$commodity_category->id)>{{
+									$commodity_category->name
+									}}</option>
 								@endforeach
 							</select>
 						</div>
@@ -227,16 +231,16 @@
 								<th scope="col">Kode Barang</th>
 								<th scope="col">Nama Barang</th>
 								<th scope="col">Merek Barang</th>
-								<th scope="col">Nomer Seri Pabrik</th>
-								<th scope="col">Ukuran</th>
-								<th scope="col">Bahan</th>
-								<th scope="col">Warna</th>
+								<!-- <th scope="col">Nomer Seri Pabrik</th> -->
+								<!-- <th scope="col">Ukuran</th>
+								<th scope="col">Bahan</th> -->
+								<!-- <th scope="col">Warna</th> -->
 								<th scope="col">Tahun</th>
 								<th scope="col">Harga</th>
 
 								<th scope="col">Jumlah</th>
 								<th scope="col">Keadaan</th>
-								<th scope="col">Pengguna</th>
+								<!-- <th scope="col">Pengguna</th> -->
 								<th scope="col">Aksi</th>
 							</tr>
 						</thead>
@@ -247,7 +251,7 @@
 								<td class="text-center align-middle">
 									<div class="d-flex flex-column align-items-center">
 										<span class="badge badge-primary ">
-											{{ $commodity->item_code }}
+											BRG-{{ $commodity->item_code }}
 										</span>
 									</div>
 								</td>
@@ -255,23 +259,23 @@
 
 								<td>{{ Str::limit($commodity->name, 55, '...') }}</td>
 								<td>{{ $commodity->brand }}</td>
-								<td>{{ $commodity->nomor_seri}}</td>
-								<td>{{ $commodity->ukuran}}</td>
-								<td>{{ $commodity->material }}</td>
-								<td>{{ $commodity->warna}}</td>
+								<!-- <td>{{ $commodity->nomor_seri}}</td> -->
+								<!-- <td>{{ $commodity->ukuran}}</td> -->
+								<!-- <td>{{ $commodity->material }}</td> -->
+								<!-- <td>{{ $commodity->warna}}</td> -->
 								<td class="text-center align-middle">
 									<div class="d-flex flex-column align-items-center">
 										<span class="badge badge-secondary text-dark ">
 											{{ $commodity->commodity_acquisition->name }}
 											{{ $commodity->year_of_purchase }}
-											<!-- </span>
-										<span class="d-flex align-items-center">
+										</span>
+										<!-- <span class="d-flex align-items-center">
 											<span class="badge badge-pill badge-info px-3"
-												title="{{ $commodity->commodity_acquisition->name }}"> -->
-											<!-- <i class="fa fa-fw far fa-face-laugh mr-1"></i> -->
+												title="{{ $commodity->commodity_acquisition->name }}">
+												<i class="fa fa-fw far fa-face-laugh mr-1"></i>
 
-										</span>
-										</span>
+											</span>
+										</span> -->
 									</div>
 								</td>
 								<td>Rp. {{ $commodity->price}}</td>
@@ -302,47 +306,50 @@
 										Rusak Berat</span>
 								</td>
 								@endif
-								<td>{{ $commodity->pengguna}}</td>
+								<!-- <td>{{ $commodity->pengguna}}</td> -->
 								<td class="text-center">
 									<div class="btn-group" role="group" aria-label="Basic example">
 
-										<!-- <a href="#" class="btn btn-sm btn-dark qr-modal-button mr-2" data-id="{{ $commodity->id }}"
-											data-toggle="modal" data-target="#qr_code_modal">
-											<i class="fas fa-fw fa-qrcode"></i>
-										</a> -->
+										<!-- <a href="#" class="btn btn-sm btn-dark qr-modal-button me-2" data-id="{{ $commodity->id }}"
+        data-bs-toggle="modal" data-bs-target="#qr_code_modal">
+        <i class="fas fa-fw fa-qrcode"></i>
+    </a> -->
 
 										@can('detail barang')
-										<a data-id="{{ $commodity->id }}" class="btn btn-sm btn-info text-white show-modal mr-2"
-											data-toggle="modal" data-target="#show_commodity" title="Lihat Detail">
+										<a data-id="{{ $commodity->id }}" class="btn btn-sm btn-info text-white show-modal m-1"
+											data-bs-toggle="modal" data-bs-target="#show_commodity" title="Lihat Detail">
 											<i class="fas fa-fw fa-info"></i>
 										</a>
 										@endcan
 
 										@can('ubah barang')
-										<a data-id="{{ $commodity->id }}" class="btn btn-sm btn-success text-white edit-modal mr-2"
-											data-toggle="modal" data-target="#commodity_edit_modal" title="Ubah data">
+										<a data-id="{{ $commodity->id }}" class="btn btn-sm btn-success text-white edit-modal m-1"
+											data-bs-toggle="modal" data-bs-target="#commodity_edit_modal" title="Ubah data">
 											<i class="fas fa-fw fa-edit"></i>
 										</a>
 										@endcan
 
 										<!-- @can('print individual barang')
-										<form action="{{ route('barang.print-individual', $commodity->id) }}" method="POST">
-											@csrf
-											<button type="submit" class="btn btn-sm btn-primary mr-2">
-												<i class="fas fa-fw fa-print"></i>
-											</button>
-										</form>
-										@endcan -->
+    <form action="{{ route('barang.print-individual', $commodity->id) }}" method="POST" class="d-inline">
+        @csrf
+        <button type="submit" class="btn btn-sm btn-primary me-2">
+            <i class="fas fa-fw fa-print"></i>
+        </button>
+    </form>
+    @endcan -->
 
 										@can('hapus barang')
-										<form action="{{ route('barang.destroy', $commodity) }}" method="POST">
+										<form action="{{ route('barang.destroy', $commodity) }}" method="POST" class="d-inline">
 											@csrf
 											@method('DELETE')
-											<button type="submit" class="btn btn-sm btn-danger delete-button"><i
-													class="fas fa-fw fa-trash-alt"></i></button>
+											<button type="submit" class="btn btn-sm btn-danger delete-button m-1">
+												<i class="fas fa-fw fa-trash-alt"></i>
+											</button>
 										</form>
 										@endcan
+
 									</div>
+
 								</td>
 
 							</tr>

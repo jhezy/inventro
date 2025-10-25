@@ -34,6 +34,14 @@ class Commodity extends Model
     }
 
     /**
+     * Get the commodity acquisition associated with the commodity.
+     */
+    public function commodity_category()
+    {
+        return $this->belongsTo(CommodityCategory::class);
+    }
+
+    /**
      * Format a date value to Indonesian date format (dd-mm-yyyy).
      */
     public function indonesian_format_date($value)

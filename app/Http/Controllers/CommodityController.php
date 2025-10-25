@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Commodity;
 use App\CommodityAcquisition;
 use App\CommodityLocation;
+use App\CommodityCategory;
 use App\Exports\CommoditiesExport;
 use App\Http\Requests\CommodityExportRequest;
 use App\Http\Requests\CommodityImportRequest;
@@ -28,13 +29,17 @@ class CommodityController extends Controller
      */
     public function index()
     {
-        $query = Commodity::query()->with('commodity_location', 'commodity_acquisition');
+        $query = Commodity::query()->with('commodity_location', 'commodity_acquisition', 'commodity_category');
         $query->when(request()->filled('condition'), function ($q) {
             return $q->where('condition', request('condition'));
         });
 
         $query->when(request()->filled('commodity_location_id'), function ($q) {
             return $q->where('commodity_location_id', request('commodity_location_id'));
+        });
+
+        $query->when(request()->filled('commodity_category_id'), function ($q) {
+            return $q->where('commodity_category_id', request('commodity_category_id'));
         });
 
         $query->when(request()->filled('commodity_acquisition_id'), function ($q) {
@@ -65,8 +70,15 @@ class CommodityController extends Controller
             return $q->where('warna', 'like', '%' . request('warna') . '%');
         });
 
-        $query->when(request()->filled('pengguna'), function ($q) {
+        $query->when(request()->filled('residu'), function ($q) {
             return $q->where('pengguna', 'like', '%' . request('pengguna') . '%');
+        });
+
+        $query->when(request()->filled('masa'), function ($q) {
+            return $q->where('masa', request('masa'));
+        });
+        $query->when(request()->filled('residu'), function ($q) {
+            return $q->where('residu', request('residu'));
         });
 
         $commodities = $query->latest()->get();
@@ -75,6 +87,8 @@ class CommodityController extends Controller
         $commodity_materials = Commodity::pluck('material')->unique()->sort();
         $commodity_acquisitions = CommodityAcquisition::orderBy('name', 'ASC')->get();
         $commodity_locations = CommodityLocation::orderBy('name', 'ASC')->get();
+        $commodity_categories = CommodityCategory::orderBy('name', 'ASC')->get();
+
 
         $commodity_condition_count = $this->commodityRepository->countCommodityCondition()->map(function ($commodity) {
             return collect([
@@ -96,6 +110,7 @@ class CommodityController extends Controller
                 'commodities',
                 'commodity_acquisitions',
                 'commodity_locations',
+                'commodity_categories',
                 'year_of_purchases',
                 'commodity_brands',
                 'commodity_materials',

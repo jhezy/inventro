@@ -1,16 +1,15 @@
-<!-- Modal -->
-<div class="modal fade" id="commodity_acquisition_edit_modal" data-backdrop="static" data-keyboard="false"
-	tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="commodity_acquisition_edit_modal" data-bs-backdrop="static" data-bs-keyboard="false"
+	tabindex="-1" aria-labelledby="commodityAcquisitionEditLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="staticBackdropLabel">Ubah Data Perolehan</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<h5 class="modal-title" id="commodityAcquisitionEditLabel">Ubah Data Perolehan</h5>
+				<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
 			<div class="modal-body">
-				<form method="POST">
+				<form method="POST" id="commodityAcquisitionEditForm">
 					@csrf
 					@method('PUT')
 					<div class="row">
@@ -30,7 +29,7 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
 						<button type="submit" class="btn btn-success">Ubah</button>
 					</div>
 				</form>

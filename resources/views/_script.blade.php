@@ -1,6 +1,6 @@
 <script>
-	$(document).ready(function () {
-		$(".show-modal").click(function () {
+	$(document).ready(function() {
+		$(".show-modal").click(function() {
 			const id = $(this).data("id");
 			let url = "{{ route('api.barang.show', ':paramID') }}".replace(
 				":paramID",
@@ -17,6 +17,9 @@
 					$("#show_commodity #name").val(res.data.name);
 					$("#show_commodity #commodity_location_id").val(
 						res.data.commodity_location.name
+					);
+					$("#show_commodity #commodity_category_id").val(
+						res.data.commodity_category.name
 					);
 					$("#show_commodity #material").val(res.data.material);
 					$("#show_commodity #brand").val(res.data.brand);
